@@ -1,9 +1,12 @@
-import React from 'react'
-
+import React from "react";
+import ReactPlayer from "react-player";
+import Navbar from "./Navbar";
 const Home = () => {
   return (
-    <div className='text-red-700'>Welcome to home!!</div>
-  )
-}
+    <>
+      
+    </>
+  );
+};
 
-export default Home
+export default Home;

@@ -8,11 +8,10 @@ const App = () => {
     <>
       <BrowserRouter>
         <Routes>
-          <Route element={<Layout />}>
-            <Route path="/" element={<Navigate to="/home" replace />} />
-            <Route path="/home" element={<Home />} />
-            <Route path="/upload" element={<UploadVideo />} />
-          </Route>
+          <Route element={<Layout />}/>
+          <Route path="/home" element={<Home />} />
+          <Route path="/upload" element={<UploadVideo />} />
+          
         </Routes>
       </BrowserRouter>
     </>

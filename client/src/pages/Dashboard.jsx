@@ -1,4 +1,7 @@
-import React,{useState} from 'react'
+import React, { useEffect, useState } from 'react'
+import { ethers } from "ethers";
+// import dotenv from "dotenv";
+// dotenv.config({ path: "./.env" });
 import Navbar from '../components/Navbar';
 import UploadVideo from '../components/UploadVideo';
 import YourVideos from './YourVideos';
@@ -6,6 +9,7 @@ import WalletEnquiry from './WalletEnquiry';
 import Notifications from './Notifications';
 import ChannelTags from './ChannelTags';
 import Subscribers from './Subscribers';
+import BiscuitFactory from "../../../hardhat/artifacts/contracts/EthBiscuits.sol/EthBiscuits.json";
 import SubscriberedChannels from './SubscriberedChannels';
 const UserProfile = () => {
     const inactive = `inline-flex items-center justify-center p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300 group`
@@ -19,7 +23,9 @@ const UserProfile = () => {
         {name:"Subsrcibers",check:5},
         {name:"Subsrcibered Channels",check:6},   
         {name:"Upload Video",check:7},   
-    ]
+  ]
+  
+  
   return (
     <>
       <Navbar/>

@@ -7,6 +7,7 @@ import { configureStore } from '@reduxjs/toolkit'
 
 
 import solInstance from './reducers/solInstance.js'
+import videoInstance from './reducers/filterSlice.js'
 const store = configureStore({
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
@@ -14,7 +15,7 @@ const store = configureStore({
   }),
   reducer: {
     sol:solInstance,
-
+    vid:videoInstance
   }
 })
 ReactDOM.createRoot(document.getElementById("root")).render(

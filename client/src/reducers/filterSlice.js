@@ -9,6 +9,9 @@ const videoInstance = createSlice({
   name:'video',
   initialState,
     reducers: {
+        videosfill:(state,action)=>{
+          state.videos=action.payload;
+        },
         videonamefilter: (state, action) => {
             const namequery=action.payload;
             const filterByTypeSubstring = (videos, typeSubstring) => {
@@ -57,6 +60,6 @@ const videoInstance = createSlice({
   }
 });
 
-export const {videobyuseraddressfilter,userfilter,videonamefilter} = solInstance.actions
+export const {videobyuseraddressfilter,userfilter,videonamefilter,videosfill} = videoInstance.actions
 
-export default solInstance.reducer
+export default videoInstance.reducer

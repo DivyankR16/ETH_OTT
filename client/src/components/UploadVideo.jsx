@@ -4,6 +4,7 @@ import { ethers } from "ethers";
 import lighthouse from "@lighthouse-web3/sdk";
 import { useSelector } from "react-redux";
 let uploadRes;
+let uploadResthumb;
 const UploadVideo = () => {
   const contract = useSelector((state) => state.sol.contract);
   const signer = useSelector((state) => state.sol.signer);
@@ -18,7 +19,16 @@ const UploadVideo = () => {
     
     console.log(uploadRes);
     };
-
+    const functhumb= async (url) => {
+      console.log(url);
+      uploadResthumb = await lighthouse.upload(
+        url,
+        "3ba4e579.560eb4b7fbd148a89f40e2c4357acfec"
+      );
+      //
+      
+      console.log(uploadResthumb);
+      };
   const CreateVideo = () => [console.log("Created video")];
   const handleTitle = (e) => {
     setTile(e.target.value);
@@ -39,10 +49,7 @@ const UploadVideo = () => {
   );
 
   const handleSubmit = async () => {
-    console.log("created here");
-    const gas = await contract.uploadVideo(uploadRes.data.Hash,duration,title,description,categories[0],categories[1],categories[2],categories[3],categories[4],categories[5]);
-    console.log("Video Uploaded")
-    console.log("created");
+    const gas = await contract.uploadVideo(uploadRes.data.Hash,uploadRes.data.Hash,duration,title,description,categories[0],categories[1],categories[2],categories[3],categories[4],categories[5]);
   };
 
   const [title, setTile] = useState("");
@@ -233,6 +240,22 @@ const UploadVideo = () => {
                 </div>
               </li>
             </ul>
+          </div>
+          <div className="mb-5">
+            <label
+              htmlFor="Video-URL"
+              className="block mb-2 text-sm font-medium text-red-700 dark:text-red-500"
+            >
+              Thumbnail image 
+            </label>
+            <input
+              type="file"
+              id="ok"
+              onChange={(e)=>{func(e.target.files)}}
+              className="bg-green-50 border border-green-500 text-green-900 placeholder-green-700 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5 dark:bg-green-100 dark:border-green-400"
+              placeholder="Bonnie Green"
+            />
+            {/* <Error /> */}
           </div>
           <div className="mb-5">
             <label

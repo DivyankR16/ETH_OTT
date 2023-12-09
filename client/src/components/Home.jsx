@@ -1,4 +1,6 @@
-import React from "react";
+
+
+import React, { useEffect } from "react";
 import ReactPlayer from "react-player";
 import Navbar from "./Navbar";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
@@ -6,7 +8,27 @@ import Card from "./Card";
 import Footer from "./Footer";
 import Searchbar from "./SearchBanner/Searchbar";
 import CustomHeading from "./Headline";
+import { useSelector } from 'react-redux'
+import { useDispatch } from "react-redux";
+import { videosfill } from "../reducers/filterSlice";
 const Home = () => {
+  const videos = useSelector((state) => state.vid.videos);
+  //const address = useSelector(state => state.sol.userAddress);
+  const contract = useSelector((state) => state.sol.contract);
+  const dispatch=useDispatch();
+  useEffect(() => {
+    const Request = async () => {
+       const allvideos=await   contract.getAllVideos();
+       console.log(allvideos.length);
+       dispatch(videosfill(allvideos));
+      //setState({provider,signer,contract});
+
+      
+    };
+    Request();
+  }, []);
+
+
   return (
     <>
       <Navbar/>

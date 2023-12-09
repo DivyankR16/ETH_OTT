@@ -7,7 +7,7 @@ import {
   PunkBidWithdrawn as PunkBidWithdrawnEvent,
   PunkBought as PunkBoughtEvent,
   PunkNoLongerForSale as PunkNoLongerForSaleEvent
-} from "../generated/Contract/Contract"
+} from "../generated/CryptoPunksMarket/CryptoPunksMarket"
 import {
   Assign,
   Transfer,

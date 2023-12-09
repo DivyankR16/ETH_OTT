@@ -3,12 +3,12 @@ schema:
   file: ./schema.graphql
 dataSources:
   - kind: ethereum
-    name: Contract
+    name: CryptoPunksMarket
     network: mainnet
     source:
       address: "0xb47e3cd837ddf8e4c57f05d70ab865de6e193bbb"
-      abi: Contract
-      startBlock: 0
+      abi: CryptoPunksMarket
+      startBlock: 3914495
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.7
@@ -23,8 +23,8 @@ dataSources:
         - PunkBought
         - PunkNoLongerForSale
       abis:
-        - name: Contract
-          file: ./abis/Contract.json
+        - name: CryptoPunksMarket
+          file: ./abis/CryptoPunksMarket.json
       eventHandlers:
         - event: Assign(indexed address,uint256)
           handler: handleAssign
@@ -42,4 +42,4 @@ dataSources:
           handler: handlePunkBought
         - event: PunkNoLongerForSale(indexed uint256)
           handler: handlePunkNoLongerForSale
-      file: ./src/contract.ts
+      file: ./src/crypto-punks-market.ts

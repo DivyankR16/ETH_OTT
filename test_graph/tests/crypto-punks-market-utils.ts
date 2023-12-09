@@ -9,7 +9,7 @@ import {
   PunkBidWithdrawn,
   PunkBought,
   PunkNoLongerForSale
-} from "../generated/Contract/Contract"
+} from "../generated/CryptoPunksMarket/CryptoPunksMarket"
 
 export function createAssignEvent(to: Address, punkIndex: BigInt): Assign {
   let assignEvent = changetype<Assign>(newMockEvent())

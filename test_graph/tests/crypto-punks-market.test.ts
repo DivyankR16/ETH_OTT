@@ -8,9 +8,9 @@ import {
 } from "matchstick-as/assembly/index"
 import { Address, BigInt } from "@graphprotocol/graph-ts"
 import { Assign } from "../generated/schema"
-import { Assign as AssignEvent } from "../generated/Contract/Contract"
-import { handleAssign } from "../src/contract"
-import { createAssignEvent } from "./contract-utils"
+import { Assign as AssignEvent } from "../generated/CryptoPunksMarket/CryptoPunksMarket"
+import { handleAssign } from "../src/crypto-punks-market"
+import { createAssignEvent } from "./crypto-punks-market-utils"
 
 // Tests structure (matchstick-as >=0.5.0)
 // https://thegraph.com/docs/en/developer/matchstick/#tests-structure-0-5-0

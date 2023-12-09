@@ -8,15 +8,19 @@ import Dashboard from "./pages/Dashboard";
 import SearchVideo from "./components/SearchVideo";
 import Userprofile from "./components/Userprofile";
 import Video from "./components/Video";
+import ErrorPage from "./components/ErrorPage";
 const App = () => {
   return (
     <>
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/upload" element={<UploadVideo />} />
-          <Route path='/single' element={<SingleVideo />} />
-          <Route path='/dashboard' element={<Dashboard/>}/>
+          <Route path="/searchVideo" element={<SearchVideo />} />
+          <Route path="/video" element={<Video />} />
+          <Route path="/userprofile" element={<Userprofile />} />
+          <Route path="/insmetamask" element={<ErrorPage />} />
+          {/* <Route path="/upload" element={<UploadVideo />} />
+          <Route path='/single' element={<SingleVideo/>}/> */}
         </Routes>
       </BrowserRouter>
     </>

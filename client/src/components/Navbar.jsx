@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { ethers } from "ethers";
 import { useSelector, useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
+import { useNavigate } from 'react-router-dom';
 // import logo from "../../assets/images/logo.png";
 import { setUserAddress,setBalance } from '../reducers/solInstance';
 import './navbar.css'
@@ -23,30 +24,37 @@ const networks = {
 const Navbar = () => {
   const address = useSelector(state => state.sol.userAddress)
   const balance = useSelector(state => state.sol.balance)
+  const navigate=useNavigate();
   console.log(address)
   console.log(balance)
   const dispatch=useDispatch()
     const connectWallet = async () => {
-      await window.ethereum.request({ method: "eth_requestAccounts" });
-      const provider = new ethers.providers.Web3Provider(
-        window.ethereum,
-        "any"
-      );
-      if (provider.network !== "matic") {
-        await window.ethereum.request({
-          method: "wallet_addEthereumChain",
-          params: [
-            {
-              ...networks["polygon"],
-            },
-          ],
-        });
+      if(window.ethereum){
+        await window.ethereum.request({ method: "eth_requestAccounts" });
+        const provider = new ethers.providers.Web3Provider(
+          window.ethereum,
+          "any"
+        );
+        if (provider.network !== "matic") {
+          await window.ethereum.request({
+            method: "wallet_addEthereumChain",
+            params: [
+              {
+                ...networks["polygon"],
+              },
+            ],
+          });
+        }
+        const account = provider.getSigner();
+        const Address = await account.getAddress();
+        dispatch(setUserAddress(Address))
+        const Balance = ethers.utils.formatEther(await account.getBalance());
+        dispatch(setBalance(Balance))
       }
-      const account = provider.getSigner();
-      const Address = await account.getAddress();
-      dispatch(setUserAddress(Address))
-      const Balance = ethers.utils.formatEther(await account.getBalance());
-      dispatch(setBalance(Balance))
+      else {
+          navigate('/insmetamask');
+      }
+      
     };
   return (
     <>

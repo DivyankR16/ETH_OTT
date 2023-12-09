@@ -9,17 +9,19 @@ const YourVideos = () => {
   const [views, setView] = useState([]);
   const contract = useSelector((state) => state.sol.contract);
   const address = useSelector(state => state.sol.userAddress);
-  const [Loading,isLoading]
+  const [loading, setLoading] = useState(false);
+
 
   useEffect(() => {
 
     const viewVideo = async () => {
+      setLoading(true);
       const views = await contract.getUserVideo(address[0]);
-      console.log(views);
       setView(views);
+      setLoading(false);
     };
     contract && viewVideo();
-  }, [contract]);
+  }, []);
 
 
   return (
@@ -27,22 +29,18 @@ const YourVideos = () => {
       <div className='mt-5 h-50 mb-5 flex justify-center'>
         These are your videos
       </div>
-      <div className="grid grid-cols-1 md:grid-cols-3 sm:grid-cols-2 gap-10">
+      
+{  loading?    ( <div className="flex justify-center items-center h-32">
+              <div className="loader ease-linear rounded-full border-8 border-t-8 border-gray-200 h-16 w-16"></div>
+            </div>):(<div className="grid grid-cols-1 md:grid-cols-3 sm:grid-cols-2 gap-10">
         <ul>
-          {data.map((item, index) => (
-            <li key={index}>{item}</li>
+          {views.map((vedio) => (
+            <Card key={vedio.VideoURI}  view={vedio[i]}/>
           ))}
         </ul>
-        <Card {state : view[i]}/>
-        <Card />
-        <Card />
-        <Card />
-        <Card />
-        <Card />
-        <Card />
-        <Card />
-        <Card />
-      </div>
+
+      
+      </div>)}
     </>
 
   )

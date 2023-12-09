@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
-// import "hardhat/console.sol";
+import "hardhat/console.sol";
 import "@openzeppelin/contracts/token/ERC1155/ERC1155.sol";
 
 contract EthBiscuits is ERC1155{
@@ -13,6 +13,7 @@ contract EthBiscuits is ERC1155{
         string name;
         address useraddress;
         uint256 subscribe;
+        address[] subscribersAddress;
         uint256[] videoID;
     }
     mapping(address => User) users;
@@ -24,6 +25,7 @@ contract EthBiscuits is ERC1155{
 
     struct Video{
         string VideoURI;
+        string ImageURI;
         string name;
         string discription;
         address owner;
@@ -37,17 +39,17 @@ contract EthBiscuits is ERC1155{
         bool comedy;
         bool action;
         bool education;
+        uint256 uploadDate;
     }
     mapping(uint256 => Video) videos;
 
-    // event :
+    // Events :
 
     // Create Video Event:
 
     event VideoUploaded(
-        string VideoURI,
+        uint256 id,
         string name,
-        string discription,
         address owner,
         uint256 duration,
         bool gaming,
@@ -55,23 +57,32 @@ contract EthBiscuits is ERC1155{
         bool music,
         bool comedy,
         bool action,
-        bool education
+        bool education,
+        uint256 uploadDate
     );
 
-    // Update video Event:
+    // // Update video Event:
 
     event Liked(
-        uint256 likes
+        uint256 likes,
+        uint256 vid
     );
 
     event DisLiked(
-        uint256 dislikes
+        uint256 dislikes,
+        uint256 vid
+    );
+
+    event View(
+        uint256 View,
+        uint256 vid
     );
 
     // Subscribe Event:
 
     event Subscribed(
-        uint256 subscribe
+        uint256 subscribe,
+        address subscribedaddress
     );
 
     // Constructor :
@@ -84,9 +95,10 @@ contract EthBiscuits is ERC1155{
     // Functions :
 
     // Upload Video Function    
-    function uploadVideo(string memory _VideoURI, uint256 _duration, string memory _name, string memory _description, bool _gaming, bool _movies, bool _music, bool _comedy, bool _action, bool _education) external {
+    function uploadVideo(string memory _VideoURI, string memory _ImageURI, uint256 _duration, string memory _name, string memory _description, bool _gaming, bool _movies, bool _music, bool _comedy, bool _action, bool _education) external {
         id +=1;
         videos[id].VideoURI = _VideoURI;
+        videos[id].ImageURI = _ImageURI;
         videos[id].owner = msg.sender;
         videos[id].name = _name;
         videos[id].discription = _description;
@@ -100,15 +112,15 @@ contract EthBiscuits is ERC1155{
         videos[id].comedy = _comedy;
         videos[id].action = _action;
         videos[id].education = _education;
+        videos[id].uploadDate = block.timestamp;
 
         _mint(msg.sender,id,1,bytes(""));
 
         users[msg.sender].videoID.push(id);
 
          emit VideoUploaded(
-            _VideoURI, 
+            id,
             _name, 
-            _description,
             msg.sender,
             _duration,
             _gaming,
@@ -116,7 +128,8 @@ contract EthBiscuits is ERC1155{
             _music,
             _comedy,
             _action,
-            _education
+            _education,
+            videos[id].uploadDate
         );
 
     }
@@ -126,7 +139,7 @@ contract EthBiscuits is ERC1155{
         uint256[] memory vid = users[user].videoID;
         Video[] memory VideoList = new Video[](vid.length);
         for (uint256 i = 0; i <= vid.length-1; i++) {          
-            VideoList[i]=Video(videos[vid[i]].VideoURI,videos[vid[i]].name,videos[vid[i]].discription,videos[vid[i]].owner,videos[vid[i]].views,videos[vid[i]].likes,videos[vid[i]].dislikes, videos[vid[i]].duration,videos[vid[i]].gaming,videos[vid[i]].movies,videos[vid[i]].music,videos[vid[i]].comedy,videos[vid[i]].action,videos[vid[i]].education);
+            VideoList[i]=Video(videos[vid[i]].VideoURI,videos[vid[i]].ImageURI,videos[vid[i]].name,videos[vid[i]].discription,videos[vid[i]].owner,videos[vid[i]].views,videos[vid[i]].likes,videos[vid[i]].dislikes, videos[vid[i]].duration,videos[vid[i]].gaming,videos[vid[i]].movies,videos[vid[i]].music,videos[vid[i]].comedy,videos[vid[i]].action,videos[vid[i]].education,videos[vid[i]].uploadDate);
         }
 
         return VideoList;
@@ -137,7 +150,7 @@ contract EthBiscuits is ERC1155{
         Video[] memory VideoList = new Video[](id-1);
 
         for (uint256 i = 2; i <= id; i++) {
-            VideoList[i-2]=Video(videos[i].VideoURI,videos[i].name,videos[i].discription,videos[i].owner,videos[i].views,videos[i].likes,videos[i].dislikes,videos[i].duration,videos[i].gaming,videos[i].movies,videos[i].music,videos[i].comedy,videos[i].action,videos[i].education);
+            VideoList[i-2]=Video(videos[i].VideoURI,videos[i].ImageURI,videos[i].name,videos[i].discription,videos[i].owner,videos[i].views,videos[i].likes,videos[i].dislikes,videos[i].duration,videos[i].gaming,videos[i].movies,videos[i].music,videos[i].comedy,videos[i].action,videos[i].education,videos[i].uploadDate);
         }
 
         return VideoList;
@@ -170,7 +183,8 @@ contract EthBiscuits is ERC1155{
         videos[_VideoId].likes++;
 
         emit Liked(
-            videos[_VideoId].likes
+            videos[_VideoId].likes,
+            _VideoId
         );
     }
 
@@ -179,7 +193,8 @@ contract EthBiscuits is ERC1155{
         videos[_VideoId].dislikes++;
 
         emit DisLiked(
-            videos[_VideoId].dislikes
+            videos[_VideoId].dislikes,
+            _VideoId
         );
     }
 
@@ -199,7 +214,7 @@ contract EthBiscuits is ERC1155{
     // Fucntion to View Video
     function viewUpdate(uint256 _VideoId) external{
         uint256 price = automatedPopularityMaker(_VideoId);
-        // console.log(price);
+        console.log(price);
         videos[_VideoId].views++;
         safeTransferFrom(msg.sender, videos[_VideoId].owner, 1, price, "");
     }
@@ -207,9 +222,11 @@ contract EthBiscuits is ERC1155{
     // Function to Subscribe
     function subscribe(address to) external{
         users[to].subscribe++;
+        users[to].subscribersAddress.push(msg.sender);
 
         emit Subscribed(
-            users[to].subscribe
+            users[to].subscribe,
+            to
         );
     }
 
@@ -219,6 +236,11 @@ contract EthBiscuits is ERC1155{
         users[msg.sender].useraddress = msg.sender;
         users[msg.sender].subscribe = 0;
         _mint(msg.sender,1,20000*(10**6),"");
+    }
+
+    // Function to mint tokens
+    function mintToken() external{
+        _mint(msg.sender,1,10000*(10**6),"");
     }
 
     // View User Function

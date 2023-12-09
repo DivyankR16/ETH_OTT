@@ -1,5 +1,6 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
+import "hardhat/console.sol";
 import "@openzeppelin/contracts/token/ERC1155/ERC1155.sol";
 
 contract EthBiscuits is ERC1155{
@@ -23,14 +24,55 @@ contract EthBiscuits is ERC1155{
 
     struct Video{
         string VideoURI;
+        string name;
+        string discription;
         address owner;
         uint256 views;
         uint256 likes;
         uint256 dislikes;
-        string Type;
         uint256 duration;
+        bool gaming;
+        bool movies;
+        bool music;
+        bool comedy;
+        bool action;
+        bool education;
     }
     mapping(uint256 => Video) videos;
+
+    // event :
+
+    // Create Video Event:
+
+    event VideoUploaded(
+        string VideoURI,
+        string name,
+        string discription,
+        address owner,
+        uint256 duration,
+        bool gaming,
+        bool movies,
+        bool music,
+        bool comedy,
+        bool action,
+        bool education
+    );
+
+    // Update video Event:
+
+    event Liked(
+        uint256 likes
+    );
+
+    event DisLiked(
+        uint256 dislikes
+    );
+
+    // Subscribe Event:
+
+    event Subscribed(
+        uint256 subscribe
+    );
 
     // Constructor :
 
@@ -42,23 +84,49 @@ contract EthBiscuits is ERC1155{
     // Functions :
 
     // Upload Video Function    
-    function uploadVideo(string memory _VideoURI, string memory _type, uint256 _duration) external {
+    function uploadVideo(string memory _VideoURI, uint256 _duration, string memory _name, string memory _description, bool _gaming, bool _movies, bool _music, bool _comedy, bool _action, bool _education) external {
         id +=1;
         videos[id].VideoURI = _VideoURI;
         videos[id].owner = msg.sender;
+        videos[id].name = _name;
+        videos[id].discription = _description;
         videos[id].views = 0;
         videos[id].likes = 0;
         videos[id].dislikes = 0;
-        videos[id].Type = _type;
         videos[id].duration = _duration;
+        videos[id].gaming = _gaming;
+        videos[id].movies = _movies;
+        videos[id].music = _music;
+        videos[id].comedy = _comedy;
+        videos[id].action = _action;
+        videos[id].education = _education;
+
+        _mint(msg.sender,id,1,bytes(""));
+
+        users[msg.sender].videoID.push(id);
+
+         emit VideoUploaded(
+            _VideoURI, 
+            _name, 
+            _description,
+            msg.sender,
+            _duration,
+            _gaming,
+            _movies,
+            _music,
+            _comedy,
+            _action,
+            _education
+        );
+
     }
 
     // Function to get users video
     function getUserVideo(address user) external view returns (Video[] memory){
         uint256[] memory vid = users[user].videoID;
         Video[] memory VideoList = new Video[](vid.length);
-        for (uint256 i = 1; i <= vid.length; i++) {          
-            VideoList[i]=Video(videos[vid[i]].VideoURI,videos[vid[i]].owner,videos[vid[i]].views,videos[vid[i]].likes,videos[vid[i]].dislikes,videos[vid[i]].Type, videos[vid[i]].duration);
+        for (uint256 i = 0; i <= vid.length-1; i++) {          
+            VideoList[i]=Video(videos[vid[i]].VideoURI,videos[vid[i]].name,videos[vid[i]].discription,videos[vid[i]].owner,videos[vid[i]].views,videos[vid[i]].likes,videos[vid[i]].dislikes, videos[vid[i]].duration,videos[vid[i]].gaming,videos[vid[i]].movies,videos[vid[i]].music,videos[vid[i]].comedy,videos[vid[i]].action,videos[vid[i]].education);
         }
 
         return VideoList;
@@ -66,57 +134,72 @@ contract EthBiscuits is ERC1155{
     
     // Function to get all the videos
     function getALLVideos() external view returns (Video[] memory){
-        Video[] memory VideoList = new Video[](id);
+        Video[] memory VideoList = new Video[](id-1);
 
-        for (uint256 i = 1; i <= id; i++) {
-            VideoList[i]=Video(videos[i].VideoURI,videos[i].owner,videos[i].views,videos[i].likes,videos[i].dislikes,videos[i].Type,videos[i].duration);
+        for (uint256 i = 2; i <= id; i++) {
+            VideoList[i-2]=Video(videos[i].VideoURI,videos[i].name,videos[i].discription,videos[i].owner,videos[i].views,videos[i].likes,videos[i].dislikes,videos[i].duration,videos[i].gaming,videos[i].movies,videos[i].music,videos[i].comedy,videos[i].action,videos[i].education);
         }
 
         return VideoList;
     }
 
     // Function to Change Authority
-    function authorityChange(address to, uint256 videoId ) external{
+    function authorityChange(address newowner, uint256 videoId ) external {
         require(videos[videoId].owner == msg.sender, "You are not the owner of this video");
-        safeTransferFrom(msg.sender, to, videoId, 1, "");
-        videos[videoId].owner = to;
-        uint256[] memory vididuser = new uint256[](users[msg.sender].videoID.length - 1);
-        for(uint256 i=1;i<=users[msg.sender].videoID.length;i++){
+        require(balanceOf(msg.sender,videoId)>0,"You do not have video nft");
+        safeTransferFrom(msg.sender, newowner, videoId, 1, bytes(""));
+        videos[videoId].owner = newowner;
+        uint256[] memory vididuser = new uint256[](users[msg.sender].videoID.length);
+        for(uint256 i=0;i<users[msg.sender].videoID.length;i++){
             if(videoId!=users[msg.sender].videoID[i]){
                 vididuser[i]=users[msg.sender].videoID[i];
+            }
+            else{
+                vididuser[i]=0;
             }
         }
         // removed from previous user
         users[msg.sender].videoID = vididuser;
 
         // assigned to new user
-        users[to].videoID.push(videoId);
+        users[newowner].videoID.push(videoId);
     }
 
     // Like Fucntion
     function like(uint256 _VideoId) external{
         videos[_VideoId].likes++;
+
+        emit Liked(
+            videos[_VideoId].likes
+        );
     }
 
     // Dislike Function
     function disLike(uint256 _VideoId) external{
         videos[_VideoId].dislikes++;
+
+        emit DisLiked(
+            videos[_VideoId].dislikes
+        );
     }
 
     // Popukarity Checker Function
     function popularity(uint256 _VideoId) public view returns (uint256){
         // Vaibhav-Pandey-Khajuriya Equation
-        return (10**6 + ((videos[_VideoId].likes / videos[_VideoId].views )*(10**6)));
+        uint256 popu = (10**6 +videos[_VideoId].likes);
+        return popu;
     }
 
     // Automated Popularity Maker
     function automatedPopularityMaker(uint256 _VideoId) public view returns (uint256){
-        return videos[_VideoId].duration * popularity(_VideoId);
+        uint256 price = videos[_VideoId].duration * popularity(_VideoId);
+        return price;
     }
 
     // Fucntion to View Video
     function viewUpdate(uint256 _VideoId) external{
         uint256 price = automatedPopularityMaker(_VideoId);
+        console.log(price);
         videos[_VideoId].views++;
         safeTransferFrom(msg.sender, videos[_VideoId].owner, 1, price, "");
     }
@@ -124,6 +207,10 @@ contract EthBiscuits is ERC1155{
     // Function to Subscribe
     function subscribe(address to) external{
         users[to].subscribe++;
+
+        emit Subscribed(
+            users[to].subscribe
+        );
     }
 
     // Function to Register NEw User
@@ -134,8 +221,18 @@ contract EthBiscuits is ERC1155{
         _mint(msg.sender,1,20000*(10**6),"");
     }
 
-    // get user details
+    // View User Function
+    function viewUser(address user) external view returns (User memory){
+        return users[user];
+    }
 
-    // get video details
+    // View Video Function
+    function viewVideo(uint256 _id) external view returns (Video memory){
+        return videos[_id];
+    }
 
+    function checkbalance(address user) external view returns (uint256){
+        uint256 balance = balanceOf(user, 1);
+        return balance;
+    }
 }

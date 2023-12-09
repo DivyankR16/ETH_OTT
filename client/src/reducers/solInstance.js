@@ -1,9 +1,8 @@
 import { createSlice } from '@reduxjs/toolkit'
-
 const initialState = {
     userAddress: '',
     contractInstance:'',
-    
+    balance:'',
 }
 
 const solInstance = createSlice({
@@ -15,10 +14,13 @@ const solInstance = createSlice({
         },
         setContractInstance: (state, action) =>{
             state.contractInstance=action.payload
+        },
+        setBalance: (state, action) => {
+            state.balance=action.payload
         }
   }
 });
 
-export const {setUserAddress,setContractInstance} = solInstance.actions
+export const {setUserAddress,setContractInstance,setBalance} = solInstance.actions
 
 export default solInstance.reducer

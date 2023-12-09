@@ -49,7 +49,7 @@ const Navbar = () => {
         }
         const account = provider.getSigner();
         const Address = await account.getAddress();
-        dispatch(setUserAddress(Address))
+        dispatch(setUserAddress(Address[0]))
         const Balance = ethers.utils.formatEther(await account.getBalance());
         dispatch(setBalance(Balance))
         window.location.reload()
@@ -96,19 +96,15 @@ const Navbar = () => {
        dispatch(setUserAddress(account));
       const provider = new ethers.providers.Web3Provider(ethereum);
       const signer = provider.getSigner();
-      console.log(await signer.getAddress(),"safhekjfnc");
+ 
 
 
       const contract = new ethers.Contract(
           contractAddress,
           contractABI,
-          provider
+          signer
       )
       console.log(contract)
-      const result = await contract.connect(signer).uploadVideo('djbfsdk',10,'Aka','description',true,false,false,false,false,false, {
-        gasLimit: 100000
-      });
-      console.log(result)
       dispatch(setContract(contract));
       dispatch(setSigner(signer));
       //setState({provider,signer,contract});
@@ -146,7 +142,7 @@ const Navbar = () => {
                 >
                   {balance}
                 </button>
-                <p className="text-white font-bold">{address}</p>
+                <p className="text-white font-bold">{address[0]}</p>
               </>
             )}
           </div>

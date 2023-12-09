@@ -38,12 +38,9 @@ const UploadVideo = () => {
   );
   const handleSubmit = async () => {
     console.log("created here");
-    console.log(await contract.signer.getAddress());
-    console.log(await signer.getAddress());
+   
 
-    console.log(contract.estimateGas.uploadVideo)
-
-    const gas = await contract.estimateGas.uploadVideo('djbfsdk',10,"Aka",'description',true,false,false,false,false,false);
+    const gas = await contract.uploadVideo('djbfsdk',10,"Aka",'description',true,false,false,false,false,false);
     console.log(gas)
 
     // const result = await contract.uploadVideo('djbfsdk',10,"Aka",'description',true,false,false,false,false,false, {

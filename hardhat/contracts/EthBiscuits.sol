@@ -1,5 +1,6 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.20;
+pragma solidity ^0.8.0;
+import "hardhat/console.sol";
 import "@openzeppelin/contracts/token/ERC1155/ERC1155.sol";
 
 contract EthBiscuits is ERC1155{
@@ -51,13 +52,17 @@ contract EthBiscuits is ERC1155{
         videos[id].dislikes = 0;
         videos[id].Type = _type;
         videos[id].duration = _duration;
+
+        _mint(msg.sender,id,1,bytes(""));
+
+        users[msg.sender].videoID.push(id);
     }
 
     // Function to get users video
     function getUserVideo(address user) external view returns (Video[] memory){
         uint256[] memory vid = users[user].videoID;
         Video[] memory VideoList = new Video[](vid.length);
-        for (uint256 i = 1; i <= vid.length; i++) {          
+        for (uint256 i = 0; i <= vid.length-1; i++) {          
             VideoList[i]=Video(videos[vid[i]].VideoURI,videos[vid[i]].owner,videos[vid[i]].views,videos[vid[i]].likes,videos[vid[i]].dislikes,videos[vid[i]].Type, videos[vid[i]].duration);
         }
 
@@ -66,31 +71,35 @@ contract EthBiscuits is ERC1155{
     
     // Function to get all the videos
     function getALLVideos() external view returns (Video[] memory){
-        Video[] memory VideoList = new Video[](id);
+        Video[] memory VideoList = new Video[](id-1);
 
-        for (uint256 i = 1; i <= id; i++) {
-            VideoList[i]=Video(videos[i].VideoURI,videos[i].owner,videos[i].views,videos[i].likes,videos[i].dislikes,videos[i].Type,videos[i].duration);
+        for (uint256 i = 2; i <= id; i++) {
+            VideoList[i-2]=Video(videos[i].VideoURI,videos[i].owner,videos[i].views,videos[i].likes,videos[i].dislikes,videos[i].Type,videos[i].duration);
         }
 
         return VideoList;
     }
 
     // Function to Change Authority
-    function authorityChange(address to, uint256 videoId ) external{
+    function authorityChange(address newowner, uint256 videoId ) external {
         require(videos[videoId].owner == msg.sender, "You are not the owner of this video");
-        safeTransferFrom(msg.sender, to, videoId, 1, "");
-        videos[videoId].owner = to;
-        uint256[] memory vididuser = new uint256[](users[msg.sender].videoID.length - 1);
-        for(uint256 i=1;i<=users[msg.sender].videoID.length;i++){
+        require(balanceOf(msg.sender,videoId)>0,"You do not have video nft");
+        safeTransferFrom(msg.sender, newowner, videoId, 1, bytes(""));
+        videos[videoId].owner = newowner;
+        uint256[] memory vididuser = new uint256[](users[msg.sender].videoID.length);
+        for(uint256 i=0;i<users[msg.sender].videoID.length;i++){
             if(videoId!=users[msg.sender].videoID[i]){
                 vididuser[i]=users[msg.sender].videoID[i];
+            }
+            else{
+                vididuser[i]=0;
             }
         }
         // removed from previous user
         users[msg.sender].videoID = vididuser;
 
         // assigned to new user
-        users[to].videoID.push(videoId);
+        users[newowner].videoID.push(videoId);
     }
 
     // Like Fucntion
@@ -106,17 +115,20 @@ contract EthBiscuits is ERC1155{
     // Popukarity Checker Function
     function popularity(uint256 _VideoId) public view returns (uint256){
         // Vaibhav-Pandey-Khajuriya Equation
-        return (10**6 + ((videos[_VideoId].likes / videos[_VideoId].views )*(10**6)));
+        uint256 popu = (10**6 +videos[_VideoId].likes);
+        return popu;
     }
 
     // Automated Popularity Maker
     function automatedPopularityMaker(uint256 _VideoId) public view returns (uint256){
-        return videos[_VideoId].duration * popularity(_VideoId);
+        uint256 price = videos[_VideoId].duration * popularity(_VideoId);
+        return price;
     }
 
     // Fucntion to View Video
     function viewUpdate(uint256 _VideoId) external{
         uint256 price = automatedPopularityMaker(_VideoId);
+        console.log(price);
         videos[_VideoId].views++;
         safeTransferFrom(msg.sender, videos[_VideoId].owner, 1, price, "");
     }
@@ -134,8 +146,18 @@ contract EthBiscuits is ERC1155{
         _mint(msg.sender,1,20000*(10**6),"");
     }
 
-    // get user details
+    // View User Function
+    function viewUser(address user) external view returns (User memory){
+        return users[user];
+    }
 
-    // get video details
+    // View Video Function
+    function viewVideo(uint256 _id) external view returns (Video memory){
+        return videos[_id];
+    }
 
+    function checkbalance(address user) external view returns (uint256){
+        uint256 balance = balanceOf(user, 1);
+        return balance;
+    }
 }

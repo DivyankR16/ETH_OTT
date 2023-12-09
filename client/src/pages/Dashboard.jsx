@@ -1,6 +1,12 @@
 import React,{useState} from 'react'
 import Navbar from '../components/Navbar';
-
+import UploadVideo from '../components/UploadVideo';
+import YourVideos from './YourVideos';
+import WalletEnquiry from './WalletEnquiry';
+import Notifications from './Notifications';
+import ChannelTags from './ChannelTags';
+import Subscribers from './Subscribers';
+import SubscriberedChannels from './SubscriberedChannels';
 const Dashboard = () => {
     const inactive = `inline-flex items-center justify-center p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300 group`
     const active = `inline-flex items-center justify-center p-4 text-blue-600 border-b-2 border-blue-600 rounded-t-lg active dark:text-blue-500 dark:border-blue-500 group`
@@ -12,6 +18,7 @@ const Dashboard = () => {
         { name: "Channel Tags", check: 4},
         {name:"Subsrcibers",check:5},
         {name:"Subsrcibered Channels",check:6},   
+        {name:"Upload Video",check:7},   
     ]
   return (
     <>
@@ -138,6 +145,13 @@ const Dashboard = () => {
                 ))}
             </ul>
           </div>
+          {curActive===1 && <YourVideos/>}
+          {curActive===2 && <WalletEnquiry/>}
+          {curActive===3 && <Notifications/>}
+          {curActive===4 && <ChannelTags/>}
+          {curActive===5 && <Subscribers/>}
+          {curActive===6 && <SubscriberedChannels/>}
+          {curActive===7 && <UploadVideo/>}
         </main>
       </div>
     </>

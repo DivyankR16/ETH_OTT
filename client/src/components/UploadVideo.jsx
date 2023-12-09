@@ -31,23 +31,20 @@ const UploadVideo = () => {
       <span className="font-medium">Alright!</span> Username available!
     </p>
   );
+  
   const Error = () => (
     <p className="mt-2 text-sm text-red-600 dark:text-red-500">
       <span className="font-medium">Oops!</span> Username already taken!
     </p>
   );
+
   const handleSubmit = async () => {
     console.log("created here");
-   
-
     const gas = await contract.uploadVideo(uploadRes.data.Hash,duration,title,description,categories[0],categories[1],categories[2],categories[3],categories[4],categories[5]);
     console.log("Video Uploaded")
-
-    // const result = await contract.uploadVideo('djbfsdk',10,"Aka",'description',true,false,false,false,false,false, {
-    //   gasLimit: 100000
-    // });
     console.log("created");
   };
+
   const [title, setTile] = useState("");
   const [description, setDescription] = useState("");
   const [duration, setDuration] = useState("");

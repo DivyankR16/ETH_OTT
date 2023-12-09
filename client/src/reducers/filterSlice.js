@@ -57,6 +57,6 @@ const videoInstance = createSlice({
   }
 });
 
-export const {setUserAddress,setContractInstance,setBalance} = solInstance.actions
+export const {videobyuseraddressfilter,userfilter,videonamefilter} = solInstance.actions
 
 export default solInstance.reducer

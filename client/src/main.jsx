@@ -7,7 +7,7 @@ import { configureStore } from '@reduxjs/toolkit'
 import solInstance from './reducers/solInstance.js'
 const store = configureStore({
   reducer: {
-    solInstances:solInstance
+    sol:solInstance
   }
 })
 ReactDOM.createRoot(document.getElementById("root")).render(

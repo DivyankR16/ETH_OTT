@@ -6,19 +6,11 @@
 // global scope, and execute the script.
 import hre from "hardhat";
 
-const currentTimestampInSeconds = Math.round(Date.now() / 1000);
-const unlockTime = currentTimestampInSeconds + 60;
+const OttFactory = await hre.ethers.getContractFactory("EthBiscuits");
+const ottFactory = await OttFactory.deploy();
 
-const lockedAmount = hre.ethers.parseEther("0.001");
+await ottFactory.deployed();
 
-const lock = await hre.ethers.deployContract("Lock", [unlockTime], {
-  value: lockedAmount,
-});
+// await ottFactory.waitForDeployment();
 
-await lock.waitForDeployment();
-
-console.log(
-  `Lock with ${hre.ethers.formatEther(
-    lockedAmount
-  )}ETH and unlock timestamp ${unlockTime} deployed to ${lock.target}`
-);
+console.log("Factory deployed to:", ottFactory.address);

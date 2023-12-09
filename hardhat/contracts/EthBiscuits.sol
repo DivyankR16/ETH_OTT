@@ -40,6 +40,40 @@ contract EthBiscuits is ERC1155{
     }
     mapping(uint256 => Video) videos;
 
+    // event :
+
+    // Create Video Event:
+
+    event VideoUploaded(
+        string VideoURI,
+        string name,
+        string discription,
+        address owner,
+        uint256 duration,
+        bool gaming,
+        bool movies,
+        bool music,
+        bool comedy,
+        bool action,
+        bool education
+    );
+
+    // Update video Event:
+
+    event Liked(
+        uint256 likes
+    );
+
+    event DisLiked(
+        uint256 dislikes
+    );
+
+    // Subscribe Event:
+
+    event Subscribed(
+        uint256 subscribe
+    );
+
     // Constructor :
 
     constructor() ERC1155("") {
@@ -70,6 +104,21 @@ contract EthBiscuits is ERC1155{
         _mint(msg.sender,id,1,bytes(""));
 
         users[msg.sender].videoID.push(id);
+
+         emit VideoUploaded(
+            _VideoURI, 
+            _name, 
+            _description,
+            msg.sender,
+            _duration,
+            _gaming,
+            _movies,
+            _music,
+            _comedy,
+            _action,
+            _education
+        );
+
     }
 
     // Function to get users video
@@ -119,11 +168,19 @@ contract EthBiscuits is ERC1155{
     // Like Fucntion
     function like(uint256 _VideoId) external{
         videos[_VideoId].likes++;
+
+        emit Liked(
+            videos[_VideoId].likes
+        );
     }
 
     // Dislike Function
     function disLike(uint256 _VideoId) external{
         videos[_VideoId].dislikes++;
+
+        emit DisLiked(
+            videos[_VideoId].dislikes
+        );
     }
 
     // Popukarity Checker Function
@@ -150,6 +207,10 @@ contract EthBiscuits is ERC1155{
     // Function to Subscribe
     function subscribe(address to) external{
         users[to].subscribe++;
+
+        emit Subscribed(
+            users[to].subscribe
+        );
     }
 
     // Function to Register NEw User

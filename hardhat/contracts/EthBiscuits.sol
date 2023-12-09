@@ -24,12 +24,19 @@ contract EthBiscuits is ERC1155{
 
     struct Video{
         string VideoURI;
+        string name;
+        string discription;
         address owner;
         uint256 views;
         uint256 likes;
         uint256 dislikes;
-        string Type;
         uint256 duration;
+        bool gaming;
+        bool movies;
+        bool music;
+        bool comedy;
+        bool action;
+        bool education;
     }
     mapping(uint256 => Video) videos;
 
@@ -43,15 +50,22 @@ contract EthBiscuits is ERC1155{
     // Functions :
 
     // Upload Video Function    
-    function uploadVideo(string memory _VideoURI, string memory _type, uint256 _duration) external {
+    function uploadVideo(string memory _VideoURI, uint256 _duration, string memory _name, string memory _description, bool _gaming, bool _movies, bool _music, bool _comedy, bool _action, bool _education) external {
         id +=1;
         videos[id].VideoURI = _VideoURI;
         videos[id].owner = msg.sender;
+        videos[id].name = _name;
+        videos[id].discription = _description;
         videos[id].views = 0;
         videos[id].likes = 0;
         videos[id].dislikes = 0;
-        videos[id].Type = _type;
         videos[id].duration = _duration;
+        videos[id].gaming = _gaming;
+        videos[id].movies = _movies;
+        videos[id].music = _music;
+        videos[id].comedy = _comedy;
+        videos[id].action = _action;
+        videos[id].education = _education;
 
         _mint(msg.sender,id,1,bytes(""));
 
@@ -63,7 +77,7 @@ contract EthBiscuits is ERC1155{
         uint256[] memory vid = users[user].videoID;
         Video[] memory VideoList = new Video[](vid.length);
         for (uint256 i = 0; i <= vid.length-1; i++) {          
-            VideoList[i]=Video(videos[vid[i]].VideoURI,videos[vid[i]].owner,videos[vid[i]].views,videos[vid[i]].likes,videos[vid[i]].dislikes,videos[vid[i]].Type, videos[vid[i]].duration);
+            VideoList[i]=Video(videos[vid[i]].VideoURI,videos[vid[i]].name,videos[vid[i]].discription,videos[vid[i]].owner,videos[vid[i]].views,videos[vid[i]].likes,videos[vid[i]].dislikes, videos[vid[i]].duration,videos[vid[i]].gaming,videos[vid[i]].movies,videos[vid[i]].music,videos[vid[i]].comedy,videos[vid[i]].action,videos[vid[i]].education);
         }
 
         return VideoList;
@@ -74,7 +88,7 @@ contract EthBiscuits is ERC1155{
         Video[] memory VideoList = new Video[](id-1);
 
         for (uint256 i = 2; i <= id; i++) {
-            VideoList[i-2]=Video(videos[i].VideoURI,videos[i].owner,videos[i].views,videos[i].likes,videos[i].dislikes,videos[i].Type,videos[i].duration);
+            VideoList[i-2]=Video(videos[i].VideoURI,videos[i].name,videos[i].discription,videos[i].owner,videos[i].views,videos[i].likes,videos[i].dislikes,videos[i].duration,videos[i].gaming,videos[i].movies,videos[i].music,videos[i].comedy,videos[i].action,videos[i].education);
         }
 
         return VideoList;

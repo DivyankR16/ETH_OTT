@@ -1,0 +1,84 @@
+type ApprovalForAll @entity(immutable: true) {
+  id: Bytes!
+  account: Bytes! # address
+  operator: Bytes! # address
+  approved: Boolean! # bool
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type DisLiked @entity(immutable: true) {
+  id: Bytes!
+  dislikes: BigInt! # uint256
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type Liked @entity(immutable: true) {
+  id: Bytes!
+  likes: BigInt! # uint256
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type Subscribed @entity(immutable: true) {
+  id: Bytes!
+  subscribe: BigInt! # uint256
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type TransferBatch @entity(immutable: true) {
+  id: Bytes!
+  operator: Bytes! # address
+  from: Bytes! # address
+  to: Bytes! # address
+  ids: [BigInt!]! # uint256[]
+  values: [BigInt!]! # uint256[]
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type TransferSingle @entity(immutable: true) {
+  id: Bytes!
+  operator: Bytes! # address
+  from: Bytes! # address
+  to: Bytes! # address
+  EthBiscuits_id: BigInt! # uint256
+  value: BigInt! # uint256
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type URI @entity(immutable: true) {
+  id: Bytes!
+  value: String! # string
+  EthBiscuits_id: BigInt! # uint256
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type VideoUploaded @entity(immutable: true) {
+  id: Bytes!
+  VideoURI: String! # string
+  name: String! # string
+  discription: String! # string
+  owner: Bytes! # address
+  duration: BigInt! # uint256
+  gaming: Boolean! # bool
+  movies: Boolean! # bool
+  music: Boolean! # bool
+  comedy: Boolean! # bool
+  action: Boolean! # bool
+  education: Boolean! # bool
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}

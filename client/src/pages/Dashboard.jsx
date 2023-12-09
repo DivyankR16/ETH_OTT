@@ -7,7 +7,7 @@ import Notifications from './Notifications';
 import ChannelTags from './ChannelTags';
 import Subscribers from './Subscribers';
 import SubscriberedChannels from './SubscriberedChannels';
-const Dashboard = () => {
+const UserProfile = () => {
     const inactive = `inline-flex items-center justify-center p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300 group`
     const active = `inline-flex items-center justify-center p-4 text-blue-600 border-b-2 border-blue-600 rounded-t-lg active dark:text-blue-500 dark:border-blue-500 group`
     const [curActive,setCurActive]=useState(1)
@@ -22,7 +22,7 @@ const Dashboard = () => {
     ]
   return (
     <>
-       <Navbar/>
+      <Navbar/>
       <div className="flex-grow text-gray-800 mt-12">
         <main className="p-6 sm:p-10 space-y-6">
           <section className="grid md:grid-cols-2 xl:grid-cols-4 gap-6">
@@ -158,4 +158,4 @@ const Dashboard = () => {
   );
 }
 
-export default Dashboard
+export default UserProfile

@@ -1,10 +1,12 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { ethers } from "ethers";
 import { useSelector, useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 import { useNavigate } from 'react-router-dom';
+import BiscuitFactory from "../../../hardhat/artifacts/contracts/EthBiscuits.sol/EthBiscuits.json";
+
 // import logo from "../../assets/images/logo.png";
-import { setUserAddress,setBalance } from '../reducers/solInstance';
+import { setUserAddress,setBalance, setContract, setSigner } from '../reducers/solInstance';
 import './navbar.css'
 const networks = {
   polygon: {
@@ -50,12 +52,71 @@ const Navbar = () => {
         dispatch(setUserAddress(Address))
         const Balance = ethers.utils.formatEther(await account.getBalance());
         dispatch(setBalance(Balance))
+        window.location.reload()
       }
       else {
           navigate('/insmetamask');
       }
       
     };
+   // const [contract, setContract] = useState();
+    const contract = useSelector(state => state.sol.contract);
+    useEffect(() => {
+    const Request = async () => {
+      // await window.ethereum.request({ method: "eth_requestAccounts" });
+      // const Web3provider = new ethers.providers.Web3Provider(window.ethereum);
+      // const signer = Web3provider.getSigner();
+      // const Address = await signer.getAddress();
+
+      // const provider = new ethers.providers.JsonRpcProvider(
+      //   "https://polygon-mumbai.infura.io/v3/d717718c06754418877e3e4e056ec84e"
+      // );
+      // console.log("test");
+      // console.log((await Web3provider.getBlockNumber()))
+
+      // const contract = new ethers.Contract(
+      //   "0x3bf546f4c6dfd73cf404786434773924bfb9695d",
+      //   BiscuitFactory.abi,
+      //   signer
+      // );
+      // dispatch(setContract(contract))
+      const contractAddress="0x3bf546f4c6dfd73cf404786434773924bfb9695d";
+      const contractABI=BiscuitFactory.abi;
+      //MetaMask oart
+      // 1. In order to do transaction on goerli testnet
+      // 2. Metamask consist of infura api which actually help in connecting to the blockchain
+
+      const {ethereum}=window;
+
+      const account = await ethereum.request({
+          method:"eth_requestAccounts"
+      })
+     // console.log(account);
+      //setAccount(account)
+       dispatch(setUserAddress(account));
+      const provider = new ethers.providers.Web3Provider(ethereum);
+      const signer = provider.getSigner();
+      console.log(await signer.getAddress(),"safhekjfnc");
+
+
+      const contract = new ethers.Contract(
+          contractAddress,
+          contractABI,
+          provider
+      )
+      console.log(contract)
+      const result = await contract.connect(signer).uploadVideo('djbfsdk',10,'Aka','description',true,false,false,false,false,false, {
+        gasLimit: 100000
+      });
+      console.log(result)
+      dispatch(setContract(contract));
+      dispatch(setSigner(signer));
+      //setState({provider,signer,contract});
+
+      
+    };
+    Request();
+  }, []);
   return (
     <>
       <nav className="bg-black  fixed w-full z-20 top-0 start-0 border-b border-gray-200 dark:border-gray-600">

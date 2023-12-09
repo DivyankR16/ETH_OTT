@@ -2,37 +2,23 @@ import { useState, useEffect } from "react";
 import BiscuitFactory from "../../../hardhat/artifacts/contracts/EthBiscuits.sol/EthBiscuits.json";
 import { ethers } from "ethers";
 import lighthouse from "@lighthouse-web3/sdk";
+import { useSelector } from "react-redux";
+let uploadRes;
 const UploadVideo = () => {
-  const [contract, setContract] = useState();
-  useEffect(() => {
-    const Request = async () => {
-      await window.ethereum.request({ method: "eth_requestAccounts" });
-      const Web3provider = new ethers.providers.Web3Provider(window.ethereum);
-      const signer = Web3provider.getSigner();
-      const Address = await signer.getAddress();
-
-      const provider = new ethers.providers.JsonRpcProvider(
-        "https://polygon-mumbai.infura.io/v3/d717718c06754418877e3e4e056ec84e"
-      );
-
-      const contract = new ethers.Contract(
-        "0x3bf546f4c6dfd73cf404786434773924bfb9695d",
-        BiscuitFactory.abi,
-        provider
-      );
-      setContract(contract);
-    };
-    Request();
-  }, [contract]);
+  const contract = useSelector((state) => state.sol.contract);
+  const signer = useSelector((state) => state.sol.signer);
+  const [uploadResponse,setupLoadResponse]=useState({});
   const func = async (url) => {
     console.log(url);
-    const uploadResponse = await lighthouse.upload(
+    uploadRes = await lighthouse.upload(
       url,
       "3ba4e579.560eb4b7fbd148a89f40e2c4357acfec"
     );
+    //
+    
+    console.log(uploadRes);
+    };
 
-    console.log(uploadResponse);
-  };
   const CreateVideo = () => [console.log("Created video")];
   const handleTitle = (e) => {
     setTile(e.target.value);
@@ -50,10 +36,46 @@ const UploadVideo = () => {
       <span className="font-medium">Oops!</span> Username already taken!
     </p>
   );
+  const handleSubmit = async () => {
+    console.log("created here");
+    console.log(await contract.signer.getAddress());
+    console.log(await signer.getAddress());
+
+    console.log(contract.estimateGas.uploadVideo)
+
+    const gas = await contract.estimateGas.uploadVideo('djbfsdk',10,"Aka",'description',true,false,false,false,false,false);
+    console.log(gas)
+
+    // const result = await contract.uploadVideo('djbfsdk',10,"Aka",'description',true,false,false,false,false,false, {
+    //   gasLimit: 100000
+    // });
+    console.log("created");
+  };
   const [title, setTile] = useState("");
   const [description, setDescription] = useState("");
   const [duration, setDuration] = useState("");
-  const [categories,setCategories]=useState("")
+  const [name,setName]=useState("");
+
+  const [categories, setCategories] = useState([
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+  ]);
+
+  const updateValueAtIndex = (index, newValue) => {
+    // Creating a copy of the array using spread (...) operator
+    const newArray = [...categories];
+
+    // Updating the value at the specified index
+    newArray[index] = newValue;
+
+    // Updating the state with the new array
+    setCategories(newArray);
+  };
+  
   return (
     <>
       <div>
@@ -88,7 +110,7 @@ const UploadVideo = () => {
               type="text"
               id="username-success"
               value={description}
-              onChange={setDescription}
+              onChange={(e)=>{setDescription(e.target.value)}}
               className="bg-green-50 border border-green-500 text-green-900 placeholder-green-700 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5 dark:bg-green-100 dark:border-green-400"
               placeholder="Bonnie Green"
             />
@@ -104,7 +126,7 @@ const UploadVideo = () => {
               type="text"
               id="username-success"
               value={duration}
-              onChange={setDuration}
+              onChange={(e)=>{setDuration(e.target.value)}}
               className="bg-green-50 border border-green-500 text-green-900 placeholder-green-700 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5 dark:bg-green-100 dark:border-green-400"
               placeholder="Bonnie Green"
             />
@@ -119,6 +141,7 @@ const UploadVideo = () => {
                   <input
                     id="vue-checkbox-list"
                     type="checkbox"
+                    onClick={() => updateValueAtIndex(0, true)}
                     value=""
                     className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500"
                   />
@@ -133,6 +156,7 @@ const UploadVideo = () => {
               <li className="w-full border-b border-gray-200 sm:border-b-0 sm:border-r dark:border-gray-600">
                 <div className="flex items-center ps-3">
                   <input
+                    onClick={() => updateValueAtIndex(1, true)}
                     id="react-checkbox-list"
                     type="checkbox"
                     value=""
@@ -149,6 +173,7 @@ const UploadVideo = () => {
               <li className="w-full border-b border-gray-200 sm:border-b-0 sm:border-r dark:border-gray-600">
                 <div className="flex items-center ps-3">
                   <input
+                    onClick={() => updateValueAtIndex(2, true)}
                     id="angular-checkbox-list"
                     type="checkbox"
                     value=""
@@ -165,6 +190,7 @@ const UploadVideo = () => {
               <li className="w-full dark:border-gray-600">
                 <div className="flex items-center ps-3">
                   <input
+                    onClick={() => updateValueAtIndex(3, true)}
                     id="laravel-checkbox-list"
                     type="checkbox"
                     value=""
@@ -181,6 +207,7 @@ const UploadVideo = () => {
               <li className="w-full dark:border-gray-600">
                 <div className="flex items-center ps-3">
                   <input
+                    onClick={() => updateValueAtIndex(4, true)}
                     id="laravel-checkbox-list"
                     type="checkbox"
                     value=""
@@ -197,6 +224,7 @@ const UploadVideo = () => {
               <li className="w-full dark:border-gray-600">
                 <div className="flex items-center ps-3">
                   <input
+                    onClick={() => updateValueAtIndex(5, true)}
                     id="laravel-checkbox-list"
                     type="checkbox"
                     value=""
@@ -222,12 +250,11 @@ const UploadVideo = () => {
             <input
               type="file"
               id="ok"
-              onChange={(e) => func(e.target.files)}
-              // value={url}
-              className="bg-red-50 border border-red-500 text-red-900 placeholder-red-700 text-sm rounded-lg focus:ring-red-500 focus:border-red-500 block w-full p-2.5 dark:bg-red-100 dark:border-red-400"
+              onChange={(e)=>{func(e.target.files)}}
+              className="bg-green-50 border border-green-500 text-green-900 placeholder-green-700 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5 dark:bg-green-100 dark:border-green-400"
               placeholder="Bonnie Green"
             />
-            <Error />
+            {/* <Error /> */}
           </div>
           <div className="mb-5">
             <label
@@ -239,16 +266,17 @@ const UploadVideo = () => {
             <input
               type="text"
               id="username-success"
-              value={title}
-              onChange={handleTitle}
+              value={name}
+              onChange={(e)=>{setName(e.target.value)}}
               className="bg-green-50 border border-green-500 text-green-900 placeholder-green-700 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5 dark:bg-green-100 dark:border-green-400"
               placeholder="Bonnie Green"
             />
+
             <Success />
           </div>
           <div className="flex flex-row justify-center align-middle">
             <button
-              type="submit"
+              onClick={()=>{handleSubmit()}}
               className="bg-cyan-500 text-teal-50 font-bold p-3 rounded-lg hover:bg-cyan-300"
             >
               Upload Video

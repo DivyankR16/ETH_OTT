@@ -3,6 +3,9 @@ const initialState = {
     userAddress: '',
     contractInstance:'',
     balance:'',
+    contract:{},
+    provider:{},
+    signer:{}
 }
 
 const solInstance = createSlice({
@@ -17,10 +20,19 @@ const solInstance = createSlice({
         },
         setBalance: (state, action) => {
             state.balance=action.payload
+        },
+        setContract:(state,action)=>{
+            state.contract=action.payload
+        },
+        setSigner:(state,action)=>{
+            state.signer=action.payload
+        },
+        setProvider:(state,action)=>{
+            state.provider=action.payload
         }
   }
 });
 
-export const {setUserAddress,setContractInstance,setBalance} = solInstance.actions
+export const {setUserAddress,setContractInstance,setBalance,setContract,setSigner,setProvider} = solInstance.actions
 
 export default solInstance.reducer

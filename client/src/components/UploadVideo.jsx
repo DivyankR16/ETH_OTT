@@ -8,28 +8,30 @@ let uploadResthumb;
 const UploadVideo = () => {
   const contract = useSelector((state) => state.sol.contract);
   const signer = useSelector((state) => state.sol.signer);
-  const [uploadResponse,setupLoadResponse]=useState({});
-  const func = async (url) => {
-    console.log(url);
-    uploadRes = await lighthouse.upload(
-      url,
-      "3ba4e579.560eb4b7fbd148a89f40e2c4357acfec"
-    );
-    //
+  // const [uploadResponse,setupLoadResponse]=useState({});
+  const [urlv,setUrlv]=useState('');
+  const [urli,setUrli]=useState('');
+  // const func = async (url) => {
+  //   console.log(url);
+  //   uploadRes = await lighthouse.upload(
+  //     url,
+  //     "3ba4e579.560eb4b7fbd148a89f40e2c4357acfec"
+  //   );
+  //   //
     
-    console.log(uploadRes);
-    };
-    const functhumb= async (url) => {
-      console.log(url);
-      uploadResthumb = await lighthouse.upload(
-        url,
-        "3ba4e579.560eb4b7fbd148a89f40e2c4357acfec"
-      );
-      //
+  //   console.log(uploadRes);
+  //   };
+  //   const functhumb= async (url) => {
+  //     console.log(url);
+  //     uploadResthumb = await lighthouse.upload(
+  //       url,
+  //       "3ba4e579.560eb4b7fbd148a89f40e2c4357acfec"
+  //     );
+  //     //
       
-      console.log(uploadResthumb);
-      };
-  const CreateVideo = () => [console.log("Created video")];
+  //     console.log(uploadResthumb);
+  //     };
+  // const CreateVideo = () => [console.log("Created video")];
   const handleTitle = (e) => {
     setTile(e.target.value);
   };
@@ -49,7 +51,30 @@ const UploadVideo = () => {
   );
 
   const handleSubmit = async () => {
-    const gas = await contract.uploadVideo(uploadRes.data.Hash,uploadRes.data.Hash,duration,title,description,categories[0],categories[1],categories[2],categories[3],categories[4],categories[5]);
+    // console.log(uploadRes);
+    uploadRes = await lighthouse.upload(
+      urlv,
+      "3ba4e579.560eb4b7fbd148a89f40e2c4357acfec"
+    );
+    uploadResthumb = await lighthouse.upload(
+      urli,
+      "3ba4e579.560eb4b7fbd148a89f40e2c4357acfec"
+    );
+    //
+    // console.log(uploadResthumb);
+    const gas = await contract.uploadVideo(
+      uploadRes.data.Hash,
+      uploadResthumb.data.Hash,
+      duration,
+      title,
+      description,
+      categories[0],
+      categories[1],
+      categories[2],
+      categories[3],
+      categories[4],
+      categories[5]
+    );
   };
 
   const [title, setTile] = useState("");
@@ -251,7 +276,7 @@ const UploadVideo = () => {
             <input
               type="file"
               id="ok"
-              onChange={(e)=>{func(e.target.files)}}
+              onChange={(e)=>{setUrli(e.target.files)}}
               className="bg-green-50 border border-green-500 text-green-900 placeholder-green-700 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5 dark:bg-green-100 dark:border-green-400"
               placeholder="Bonnie Green"
             />
@@ -267,7 +292,7 @@ const UploadVideo = () => {
             <input
               type="file"
               id="ok"
-              onChange={(e)=>{func(e.target.files)}}
+              onChange={(e)=>{setUrlv(e.target.files)}}
               className="bg-green-50 border border-green-500 text-green-900 placeholder-green-700 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5 dark:bg-green-100 dark:border-green-400"
               placeholder="Bonnie Green"
             />
@@ -293,7 +318,7 @@ const UploadVideo = () => {
           </div>
           <div className="flex flex-row justify-center align-middle">
             <button
-              onClick={()=>{handleSubmit()}}
+              onClick={handleSubmit}
               className="bg-cyan-500 text-teal-50 font-bold p-3 rounded-lg hover:bg-cyan-300"
             >
               Upload Video

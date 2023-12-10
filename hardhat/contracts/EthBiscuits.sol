@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
-import "hardhat/console.sol";
+// import "hardhat/console.sol";
 import "@openzeppelin/contracts/token/ERC1155/ERC1155.sol";
 
 contract EthBiscuits is ERC1155{
@@ -214,7 +214,7 @@ contract EthBiscuits is ERC1155{
     // Fucntion to View Video
     function viewUpdate(uint256 _VideoId) external{
         uint256 price = automatedPopularityMaker(_VideoId);
-        console.log(price);
+        // console.log(price);
         videos[_VideoId].views++;
         safeTransferFrom(msg.sender, videos[_VideoId].owner, 1, price, "");
     }

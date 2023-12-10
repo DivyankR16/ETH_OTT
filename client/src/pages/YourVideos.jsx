@@ -16,12 +16,14 @@ const YourVideos = () => {
 
     const viewVideo = async () => {
       setLoading(true);
-      const views = await contract.getUserVideo(address[0]);
-      setView(views);
-      setLoading(false);
+      if (contract.length > 0) {
+        const views = await contract.getUserVideo(address[0]);
+        setView(views);
+        setLoading(false);
+      }
     };
     contract && viewVideo();
-  }, []);
+  }, [contract]);
 
 
   return (

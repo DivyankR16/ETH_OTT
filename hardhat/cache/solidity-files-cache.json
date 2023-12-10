@@ -37,8 +37,8 @@
       ]
     },
     "C:\\Users\\Divyank\\OneDrive\\Desktop\\ETH_OTT\\hardhat\\contracts\\EthBiscuits.sol": {
-      "lastModificationDate": 1702122054440,
-      "contentHash": "c7fcecc68f4c8e56890cf3d6c798fe47",
+      "lastModificationDate": 1702158234416,
+      "contentHash": "b91f46638e6a5d677ff406cbc8652200",
       "sourceName": "contracts/EthBiscuits.sol",
       "solcConfig": {
         "version": "0.8.20",

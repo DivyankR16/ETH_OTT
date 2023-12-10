@@ -7,7 +7,7 @@ import UploadVideo from '../components/UploadVideo';
 import YourVideos from './YourVideos';
 import WalletEnquiry from './WalletEnquiry';
 import Notifications from './Notifications';
-import ChannelTags from './ChannelTags';
+// import ChannelTags from './ChannelTags';
 import Subscribers from './Subscribers';
 import BiscuitFactory from "../../../hardhat/artifacts/contracts/EthBiscuits.sol/EthBiscuits.json";
 import SubscriberedChannels from './SubscriberedChannels';
@@ -154,7 +154,7 @@ const UserProfile = () => {
           {curActive===1 && <YourVideos/>}
           {curActive===2 && <WalletEnquiry/>}
           {curActive===3 && <Notifications/>}
-          {curActive===4 && <ChannelTags/>}
+          {/* {curActive===4 && <ChannelTags/>} */}
           {curActive===5 && <Subscribers/>}
           {curActive===6 && <SubscriberedChannels/>}
           {curActive===7 && <UploadVideo/>}

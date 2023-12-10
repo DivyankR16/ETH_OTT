@@ -6,7 +6,7 @@ import UploadVideo from "./components/UploadVideo";
 import SingleVideo from "./components/SingleVideo";
 import UserProfile from "./pages/Dashboard";
 import SearchVideo from "./components/SearchVideo";
-
+// import Test from "./components/test";
 import Video from "./components/Video";
 import ErrorPage from "./components/ErrorPage";
 
@@ -20,6 +20,7 @@ const App = () => {
           <Route path="/video" element={<Video />} />
           <Route path="/userprofile" element={<UserProfile />} />
           <Route path="/insmetamask" element={<ErrorPage />} />
+          {/* <Route path="/test" element={<Test />} /> */}
           {/* <Route path="/upload" element={<UploadVideo />} />
           <Route path='/single' element={<SingleVideo/>}/> */}
         </Routes>

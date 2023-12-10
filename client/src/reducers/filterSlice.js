@@ -19,7 +19,7 @@ const videoInstance = createSlice({
               };
               
               // Example: Filter videos where the type includes the substring "Music"
-            return  filteredVideos = filterByTypeSubstring(videos, namequery);
+            return  filterByTypeSubstring(state.videos, namequery);
               
 
         },
@@ -33,9 +33,9 @@ const videoInstance = createSlice({
             };
               
               // Example: Filter videos where the type includes the substring "Music"
-            const addressowner = filterByaddressSubstring(user,userquery);
-            const nameowner = filterBynameSubstring(user, userquery);
-            return combinedArray = [...addressowner, ...nameowner.filter(obj2 => !addressowner.some(obj1 => obj1.useraddress === obj2.useraddress))];
+            const addressowner = filterByaddressSubstring(state.user,userquery);
+            const nameowner = filterBynameSubstring(state.user, userquery);
+            return  [...addressowner, ...nameowner.filter(obj2 => !addressowner.some(obj1 => obj1.useraddress === obj2.useraddress))];
         },
         videobyuseraddressfilter: (state, action) => {
           const addressquery=action.payload;
@@ -44,7 +44,7 @@ const videoInstance = createSlice({
             };
             
             // Example: Filter videos where the type includes the substring "Music"
-          return  filteredVideos = filterByTypeSubstring(videos, addressquery);
+          return  filterByTypeSubstring(state.videos, addressquery);
             
 
       },

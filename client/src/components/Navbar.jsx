@@ -80,7 +80,7 @@ const Navbar = () => {
       //   signer
       // );
       // dispatch(setContract(contract))
-      const contractAddress="0x3bf546f4c6dfd73cf404786434773924bfb9695d";
+      const contractAddress = "0xed4035671D321266EE8dA273f0dB53dEDD2902d9";
       const contractABI=BiscuitFactory.abi;
       //MetaMask oart
       // 1. In order to do transaction on goerli testnet

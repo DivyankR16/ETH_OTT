@@ -18,15 +18,16 @@ const Home = () => {
   const dispatch=useDispatch();
   useEffect(() => {
     const Request = async () => {
-       const allvideos=await   contract.getAllVideos();
-       console.log(allvideos.length);
-       dispatch(videosfill(allvideos));
-      //setState({provider,signer,contract});
+      if (contract.length > 0) {
+        const allvideos = await contract.getAllVideos();
+        console.log(allvideos.length);
+        dispatch(videosfill(allvideos));
+        //setState({provider,signer,contract});
 
-      
+      }
     };
     Request();
-  }, []);
+  }, [contract,dispatch]);
 
 
   return (

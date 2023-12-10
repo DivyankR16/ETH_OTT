@@ -29,8 +29,10 @@ This provide edge over subscription based model where user even has to pay for v
 This reduces the redundant middleman in the system which buys liscense from Video creators and sell subscriptions to watchers making a profit in between the process. In this a Smart COntract will governt the Distribution of price to producers and Taking charges from user thus reducing the redundant Layer.
 
  
+![image](https://github.com/DivyankR16/ETH_OTT/assets/94189081/9c0b3252-8977-4d42-aae8-271e3f8bb9ad)
 
  
+![image](https://github.com/DivyankR16/ETH_OTT/assets/94189081/d9760848-abf9-4626-9dd5-09a4ea288066)
 
 
 
@@ -85,6 +87,7 @@ Currently the model uses custom tokens that can be minted infinitely as and when
 Architecture :
 
  
+![image](https://github.com/DivyankR16/ETH_OTT/assets/94189081/6a1b1737-0d96-41ab-8433-47823fe46998)
 
 
 
